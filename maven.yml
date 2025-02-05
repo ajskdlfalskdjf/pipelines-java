@@ -1,22 +1,45 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
 - main
 
 pool:
   vmImage: 'windows-latest'
 
-steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+stages:
+  - stage: Build
+    jobs:
+      - job: BuildJob
+        steps:
+          - script: echo "Build stage"
+            displayName: 'Dummy Build Step'
+
+  - stage: Test
+    dependsOn: Build
+    jobs:
+      - job: TestJob
+        steps:
+          - script: echo "Test stage"
+            displayName: 'Dummy Test Step'
+
+  - stage: CodeAnalysis
+    dependsOn: Test
+    jobs:
+      - job: CodeAnalysisJob
+        steps:
+          - script: echo "Code Analysis stage"
+            displayName: 'Dummy Code Analysis Step'
+
+  - stage: Package
+    dependsOn: CodeAnalysis
+    jobs:
+      - job: PackageJob
+        steps:
+          - script: echo "Package stage"
+            displayName: 'Dummy Package Step'
+
+  - stage: Deploy
+    dependsOn: Package
+    jobs:
+      - job: DeployJob
+        steps:
+          - script: echo "Deploy stage"
+            displayName: 'Dummy Deploy Step'
