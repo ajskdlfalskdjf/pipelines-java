@@ -4,10 +4,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-- {{ branch }}
+- main
 
 pool:
-  {{ pool }}
+  name: 'Azure-Pipelines-1ESPT-ExDShared'
+  vmImage: 'windows-latest'
 
 steps:
 - task: Maven@3
